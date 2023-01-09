@@ -151,6 +151,7 @@ components = {
     },
 }
 
+
 # Helper functions to interface with nextion
 def acknowledge(code=0x01, timeout=2):
     termination = 0
@@ -167,6 +168,7 @@ def acknowledge(code=0x01, timeout=2):
                 response = temp
     return (response == code)
 
+
 def sendCmd(cmd, ack=True, timeout=2):
     if isinstance(cmd, str):
         cmd = cmd.encode("ascii")
@@ -180,7 +182,8 @@ def sendCmd(cmd, ack=True, timeout=2):
     else:
         return True
 
-def getVal(var:str, ext=".val", timeout=2):
+
+def getVal(var: str, ext=".val", timeout=2):
     ser.reset_input_buffer()
     if ext and ext[0] != ".":
         ext = "." + ext
@@ -200,7 +203,8 @@ def getVal(var:str, ext=".val", timeout=2):
                     done = True
     return struct.unpack_from("<I", data, 1)[0]
 
-def getTxt(var:str, ext=".txt", encoding="utf-8", timeout=2):
+
+def getTxt(var: str, ext=".txt", encoding="utf-8", timeout=2):
     ser.reset_input_buffer()
     if ext and ext[0] != ".":
         ext = "." + ext
@@ -228,7 +232,8 @@ def getTxt(var:str, ext=".txt", encoding="utf-8", timeout=2):
                     data = data[:-1]
     return data.decode(encoding=encoding)
 
-def getType(id:int, timeout=2):
+
+def getType(id: int, timeout=2):
     ser.reset_input_buffer()
     sendCmd("prints b[{}].type,1".format(id), ack=False)
     t = time.time()
@@ -238,6 +243,7 @@ def getType(id:int, timeout=2):
             break
     return None
 
+
 # Just in case, exit reparse mode
 sendCmd("DRAKJHSUYDGBNCJHGJKSHBDN")
 
@@ -246,11 +252,11 @@ if not sendCmd("bkcmd=3", timeout=timeout):
     raise Exception("Could not enable acknowledge on nextion. ")
 
 # Count number of pages and objects
-for page in range(0,255):
+for page in range(0, 255):
     if not sendCmd("page {}".format(page), timeout=timeout):
         break
     print("Page {: >3}:".format(page))
-    for component in range(1,255):
+    for component in range(1, 255):
         # check if we're still in range
         if component != getVal("b[{}].id".format(component), ext="", timeout=timeout):
             break
@@ -263,17 +269,20 @@ for page in range(0,255):
             typeStr = components[type]["name"]
             typeSafe = type
         print(4 * " " + "Component {: >3}: ".format(component))
-        padding = max([len("type")] + [len(e) for e in components[typeSafe]["attributes"]]) + 1
+        padding = max([len("type")] + [len(e)
+                      for e in components[typeSafe]["attributes"]]) + 1
         print(8 * " " + "{} {} ({})".format("Type:".ljust(padding), type, typeStr))
         for att in components[typeSafe]["attributes"]:
             val = None
             if att in attTxt:
                 if readText:
-                    val = getTxt("b[{}].{}".format(component, att), ext="", timeout=timeout)
+                    val = getTxt("b[{}].{}".format(
+                        component, att), ext="", timeout=timeout)
                     if val:
                         val = "\"" + val + "\""
             else:
-                val = getVal("b[{}].{}".format(component, att), ext="", timeout=timeout)
+                val = getVal("b[{}].{}".format(component, att),
+                             ext="", timeout=timeout)
             if val is None:
                 continue
             print(8 * " " + "{} {}".format((att + ":").ljust(padding), val))

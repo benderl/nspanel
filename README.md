@@ -1,4 +1,5 @@
 # NSPanel Hacking
+
 Sonoff NSPanel protocol and hacking information and Tasmota Berry driver.
 
 NSPanel protocol [manual](https://blakadder.github.io/nspanel/)
@@ -20,8 +21,10 @@ Tasmota driver [`nspanel.be`](https://github.com/blakadder/nspanel/blob/main/nsp
 * [TyzzyT/Sonoff-NSPanel-with-ESPHome](https://github.com/TyzzyT/Sonoff-NSPanel-with-ESPHome) - example ESPHome config
 
 ### UI
- - `eu-background.xcf` - Gimp format XCF file to help you layout your custom UI.  Set as the background image in Nextion Editor then use `vis <id>,0` to hide it.  It shows the section of the screen which is hidden by the bezel in the EU version.  The alignment marks take this in to account, so the centre intersection in the image is the centre of the screen on the real device.
+
+* `eu-background.xcf` - Gimp format XCF file to help you layout your custom UI.  Set as the background image in Nextion Editor then use `vis <id>,0` to hide it.  It shows the section of the screen which is hidden by the bezel in the EU version.  The alignment marks take this in to account, so the centre intersection in the image is the centre of the screen on the real device.
 
 ## To-do List
-- [ ] Home Assistant trigger discovery for scene widgets
-- [ ] Home Assistant blueprint? for thermostat page 
+
+* [ ] Home Assistant trigger discovery for scene widgets
+* [ ] Home Assistant blueprint? for thermostat page

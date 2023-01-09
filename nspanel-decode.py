@@ -1,9 +1,9 @@
 import binascii
 import struct
-import codecs
 
 print("Calculate NSPanel hex command from JSON payload\n")
 value = input("Enter JSON:\n")
+
 
 def findtype(value):
     if "relation" in value:
@@ -50,13 +50,14 @@ def findtype(value):
         type = 128
     elif "ctype" in value:
         # 80
-        type = 132    
+        type = 132
     else:
         print("Type not found")
         type = 0
     return type
 
-def crc16(data:bytes, poly:hex=0xA001) -> str:
+
+def crc16(data: bytes, poly: hex = 0xA001) -> str:
     '''
         CRC-16 MODBUS HASHING ALGORITHM
     '''
@@ -68,7 +69,8 @@ def crc16(data:bytes, poly:hex=0xA001) -> str:
                    if (crc & 0x0001)
                    else crc >> 1)
     return crc
-    
+
+
 print("ns_type:", findtype(value))
 
 json_payload = bytes(value, 'ascii')
@@ -83,15 +85,15 @@ length = len(value).to_bytes(2, 'little')
 
 bytes_payload = header + nsp_type + length + json_payload
 
-#print("bytes_payload:", bytes_payload)
+# print("bytes_payload:", bytes_payload)
 
 msg_crc = crc16(bytes_payload)
 
-#print('{:04x}'.format(msg_crc))
+# print('{:04x}'.format(msg_crc))
 
-crc=struct.pack('H', msg_crc)
+crc = struct.pack('H', msg_crc)
 
-command=binascii.hexlify(bytes_payload + crc)
+command = binascii.hexlify(bytes_payload + crc)
 
 print("\n\n")
 print(bytes.decode(command))

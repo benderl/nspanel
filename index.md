@@ -1,5 +1,6 @@
-# NSPanel Protocol 
-```
+# NSPanel Protocol
+
+```text
 55 AA [type] [payload length] [00] [JSON payload] [crc] [crc]
 ```
 
@@ -25,6 +26,7 @@
 ### Show relays status
 
 Typical payload
+
 ```json
 {"switches":[{"outlet":1,"switch":"on"}]}
 ```
@@ -39,6 +41,7 @@ You can combine both messages as one payload: `{"switches":[{"switch":"off","out
 ### Set weather forecast display
 
 Typical payload
+
 ```json
 {"HMI_weather":7,"HMI_outdoorTemp":{"current":5,"range":"-3,8"}}
 ```
@@ -52,9 +55,11 @@ Typical payload
 ![Main Page](images/mainpage.jpg)
 
 ## Thermostat Page
+
 ### Thermostat screen control
 
 Typical payloads
+
 ```json
 {"ATCEnable":0,"ATCMode":0,"ATCExpect0":27}
 {"ATCMode":1,"ATCExpect1":29}
@@ -71,6 +76,7 @@ Typical payloads
 ### Activate thermostat page
 
 Original payload to activate thermostat screen
+
 ```json
 {"HMI_ATCDevice":{"ctype":"device","id":"1001383218","outlet":0,"etype":"hot"}}
 ```
@@ -92,6 +98,7 @@ In original firmware the "id" is the NSPanel's one but you can set the "id" to a
 ### Draw widgets
 
 Typical payloads
+
 ```json
 {"HMI_resources":[{"index":1,"ctype":"device","id":"1000f71b01","uiid":103}]}
 {"HMI_resources":[{"index":2,"ctype":"group","id":"1000f190e6","uiid":103}]}
@@ -127,30 +134,38 @@ When initially drawing widgets you need to send commands for all 8 indexes, if y
 | `"id":%s` | Identical to the "id" used when drawing the widget | | 86 |
 | `"params":` | Parameters of the widget, different for each widget | When you use the widget you receive all the available parameters in the same payload | 86 |
 | `"name":"%s"` | Name for the widget icon. 8 characters max, rest will not be visible. __not required__ | Depending on which characters are used it can fit 9 characters | 86 |
-| `"online":%bool` | Online status of the widget<BR>`%b` = `true` or `false`  | Required **only for device** ctype | 86 |
+| `"online":%bool` | Online status of the widget<BR>`%b` = `true` or `false`  | Required __only for device__ ctype | 86 |
 
-Scenes only use id and name. `"relation"` key can be omitted or replaces in JSON: 
+Scenes only use id and name. `"relation"` key can be omitted or replaces in JSON:
 
-#### Widget state command examples 
-##### Any widget state to online and on 
+#### Widget state command examples
+
+##### Any widget state to online and on
+
 `{"relation":[{"id":"7","online":true,"params":{"switch":"on"}}]}`
 
-##### Toggle switch widget icon to on 
+##### Toggle switch widget icon to on
+
 `{"relation":{"id":"1","params":{"switch":"on"}}}`
 
 ##### Individual toggles inside multi-switch widgets
+
 `{"relation":{"id":"2","params":{"switches":[{"switch":"off","outlet":1}]}}}`
 
 ##### Curtain
+
 `{"relation":{"id":"3","params":{"setclose":"70"}}}`
 
-##### LED Strip 
+##### LED Strip
+
 `{"relation":{"id":"5","params":{"light_type":1,"colorR":0,"colorG":0,"colorB":0,"bright":74,"mode":1}}}`
 
 ##### White bulb
+
 `{"relation":{"id":"6","params":{"ltype":"white","white":{"br":100,"ct":171}}}}`
 
 ##### Color Bulb
+
 Color Bulb to RGB mode - `{"relation":{"id":"7","params":{"ltype":"color","color":{"r":248,"g":252,"b":248,"br":50}}}}`
 
 Color bulb to white mode - `{"relation":{"id":"7","params":{"ltype":"white","white":{"100":50,"ct":171}}}}`
